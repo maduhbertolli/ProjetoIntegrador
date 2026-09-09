@@ -40,6 +40,30 @@ export async function adicionarAvaliacao(avaliacao) {
   }
 }
 
+export async function deletarAvaliacao(id) {
+  try {
+    const avaliacoes = await buscarAvaliacoes();
+    const novaLista = avaliacoes.filter(filme => filme.id !== id);
+    await salvarAvaliacoes(novaLista);
+  } catch (error) {
+    console.log('Erro ao deletar avaliação:', error);
+  }
+}
+
+export async function atualizarAvaliacao(id, dadosAtualizados) {
+  try {
+    const avaliacoes = await buscarAvaliacoes();
+    const index = avaliacoes.findIndex(filme => filme.id === id);
+    
+    if (index !== -1) {
+      avaliacoes[index] = { ...avaliacoes[index], ...dadosAtualizados };
+      await salvarAvaliacoes(avaliacoes);
+    }
+  } catch (error) {
+    console.log('Erro ao atualizar avaliação:', error);
+  }
+}
+
 export async function limparAvaliacoes() {
   try {
     await AsyncStorage.removeItem(CHAVE);
